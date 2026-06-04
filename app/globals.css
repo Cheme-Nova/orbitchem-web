@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Syne:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -22,9 +21,4 @@
   .btn-accent { @apply px-5 py-2.5 bg-oc text-white font-mono text-xs tracking-widest uppercase rounded transition-all hover:opacity-90 inline-flex items-center gap-2; }
   .section-label { @apply text-xs font-mono tracking-[0.2em] uppercase text-teal mb-2; }
   .section-title { @apply font-serif text-4xl font-light leading-tight text-light; }
-  .tab-active { @apply text-teal border-b-2 border-teal; }
-  .tab-inactive { @apply text-muted border-b-2 border-transparent hover:text-light hover:border-white/20; }
 }
-
-@keyframes spin-slow { to { transform: rotate(360deg); } }
-.spin-slow { animation: spin-slow 2s linear infinite; }
