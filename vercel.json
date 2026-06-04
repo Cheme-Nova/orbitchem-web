@@ -1,0 +1,11 @@
+{
+  "env": {
+    "NEXT_PUBLIC_API_URL": "https://chemenovausa-orbitchem.hf.space"
+  },
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [{"key":"Cache-Control","value":"no-store"}]
+    }
+  ]
+}

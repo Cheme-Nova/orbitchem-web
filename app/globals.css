@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Syne:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body { background: #0A0A0F; color: #F0F2F5; font-family: 'Syne', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: #12121A; }
+  ::-webkit-scrollbar-thumb { background: #1C2128; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #00C9B1; }
+}
+
+@layer components {
+  .card { @apply bg-surface border border-white/8 rounded-lg p-5; }
+  .metric-card { @apply bg-gradient-to-br from-[#0A1628] to-[#112240] border border-[#1e3a5f] rounded-lg p-4; }
+  .input { @apply w-full bg-surface2 border border-white/10 rounded px-3 py-2 text-sm text-light placeholder:text-muted focus:outline-none focus:border-teal transition-colors; }
+  .select { @apply w-full bg-surface2 border border-white/10 rounded px-3 py-2 text-sm text-light focus:outline-none focus:border-teal; }
+  .btn-primary { @apply px-5 py-2.5 bg-teal text-navy font-mono text-xs tracking-widest uppercase rounded transition-all hover:bg-teal2 disabled:opacity-40 disabled:cursor-not-allowed inline-flex items-center gap-2; }
+  .btn-secondary { @apply px-5 py-2.5 bg-transparent border border-white/15 text-muted font-mono text-xs tracking-widest uppercase rounded transition-all hover:text-light hover:border-white/30 inline-flex items-center gap-2; }
+  .btn-accent { @apply px-5 py-2.5 bg-oc text-white font-mono text-xs tracking-widest uppercase rounded transition-all hover:opacity-90 inline-flex items-center gap-2; }
+  .section-label { @apply text-xs font-mono tracking-[0.2em] uppercase text-teal mb-2; }
+  .section-title { @apply font-serif text-4xl font-light leading-tight text-light; }
+  .tab-active { @apply text-teal border-b-2 border-teal; }
+  .tab-inactive { @apply text-muted border-b-2 border-transparent hover:text-light hover:border-white/20; }
+}
+
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+.spin-slow { animation: spin-slow 2s linear infinite; }
