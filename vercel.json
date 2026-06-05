@@ -1,6 +1,6 @@
 {
   "env": {
-    "NEXT_PUBLIC_API_URL": "https://chemenovausa-orbitchem.hf.space"
+    "NEXT_PUBLIC_API_URL": "https://chemenovausa-orbitchem-api.hf.space"
   },
   "headers": [
     {
