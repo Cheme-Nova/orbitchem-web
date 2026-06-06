@@ -130,7 +130,7 @@ export default function OrbitComparisonPage() {
                     <BarChart data={retentionData}>
                       <XAxis dataKey="orbit" tick={{fontSize:10,fill:'#8A9099',fontFamily:'JetBrains Mono'}} />
                       <YAxis tick={{fontSize:10,fill:'#8A9099'}} domain={[0,105]} />
-                      <Tooltip contentStyle={TT.content} formatter={(v:number)=>[`${v.toFixed(1)}%`,'Tensile retention']} />
+                      <Tooltip contentStyle={TT.content} formatter={(v)=>[`${(v as number)?.toFixed(1) ?? '0'}%`,'Tensile retention']} />
                       <ReferenceLine y={70} stroke="#EF9F27" strokeDasharray="4 2" label={{value:'70% limit',fontSize:8,fill:'#EF9F27',position:'right'}} />
                       <Bar dataKey="retention" radius={[4,4,0,0]}>
                         {retentionData.map((d,i)=><Cell key={i} fill={d.pass?'#0D9488':'#E24B4A'} />)}
@@ -148,7 +148,7 @@ export default function OrbitComparisonPage() {
                     <BarChart data={safetyData}>
                       <XAxis dataKey="orbit" tick={{fontSize:10,fill:'#8A9099',fontFamily:'JetBrains Mono'}} />
                       <YAxis tick={{fontSize:10,fill:'#8A9099'}} />
-                      <Tooltip contentStyle={TT.content} formatter={(v:number)=>[`${v.toFixed(1)}×`,'Safety factor']} />
+                      <Tooltip contentStyle={TT.content} formatter={(v)=>[`${(v as number)?.toFixed(1) ?? '0'}×`,'Safety factor']} />
                       <ReferenceLine y={2} stroke="#EF9F27" strokeDasharray="4 2" label={{value:'2× min',fontSize:8,fill:'#EF9F27',position:'right'}} />
                       <Bar dataKey="safety" radius={[4,4,0,0]}>
                         {safetyData.map((d,i)=><Cell key={i} fill={d.safety>=2?'#1D9E75':d.safety>=1?'#EF9F27':'#E24B4A'} />)}
