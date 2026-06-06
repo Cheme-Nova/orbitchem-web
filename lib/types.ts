@@ -46,6 +46,28 @@ export interface FullQualReport {
   qualification_summary: QualSummary
 }
 
+export interface BomSubstitution {
+  name: string
+  tml_pct: number
+  cvcm_pct: number
+}
+export interface BomAuditRow {
+  material: string
+  matched_name: string | null
+  in_db: boolean
+  function: string
+  tml_pct: number | null
+  cvcm_pct: number | null
+  nasa_pass: boolean
+  esa_pass: boolean
+  risk_level: 'low' | 'medium' | 'high' | 'critical' | 'unknown'
+  substitutions: BomSubstitution[]
+}
+export interface BomAuditReport {
+  audit: BomAuditRow[]
+  summary: { total: number; pass: number; fail: number; critical: number }
+}
+
 export interface SpaceMaterial {
   name: string; function: string
   vp_kPa: number | null; cte_ppm_K: number | null
