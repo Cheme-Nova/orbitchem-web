@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { api } from '@/lib/api'
 import type { BomAuditReport, BomAuditRow } from '@/lib/types'
-import { AlertTriangle, CheckCircle, ChevronDown, ChevronRight, ArrowRight, Loader2 } from 'lucide-react'
+import { AlertTriangle, CheckCircle, ChevronDown, ChevronRight, ArrowRight, Loader2, Download, Printer } from 'lucide-react'
 
 const DEMO_BOM = `Kapton HN
 Hysol EA 9394
@@ -140,6 +140,33 @@ export default function BomAuditPage() {
     finally { setLoading(false) }
   }
 
+  function downloadCSV() {
+    if (!report) return
+    const header = ['Material', 'Matched Name', 'In DB', 'Function', 'TML %', 'CVCM %', 'NASA Pass', 'ESA Pass', 'Risk Level', 'Substitutions']
+    const rows = report.audit.map(r => [
+      r.material,
+      r.matched_name ?? '',
+      r.in_db ? 'yes' : 'no',
+      r.function,
+      r.tml_pct  != null ? r.tml_pct.toFixed(4)  : '',
+      r.cvcm_pct != null ? r.cvcm_pct.toFixed(4) : '',
+      r.nasa_pass ? 'PASS' : 'FAIL',
+      r.esa_pass  ? 'PASS' : 'FAIL',
+      r.risk_level,
+      r.substitutions.map(s => `${s.name} (TML ${s.tml_pct.toFixed(2)}%, CVCM ${s.cvcm_pct.toFixed(3)}%)`).join('; '),
+    ])
+    const csv = [header, ...rows]
+      .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+      .join('\n')
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+    const url  = URL.createObjectURL(blob)
+    const a    = document.createElement('a')
+    a.href = url
+    a.download = `orbitchem-bom-audit-${new Date().toISOString().slice(0,10)}.csv`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
   const s = report?.summary
   const failures = report?.audit.filter(r => !r.nasa_pass) ?? []
   const passes   = report?.audit.filter(r =>  r.nasa_pass) ?? []
@@ -160,7 +187,7 @@ export default function BomAuditPage() {
       <div className="grid lg:grid-cols-5 gap-6">
 
         {/* Input panel */}
-        <div className="lg:col-span-2 space-y-3">
+        <div className="lg:col-span-2 space-y-3 print:hidden">
           <div className="card space-y-3">
             <div className="flex items-center justify-between">
               <div className="text-[10px] font-mono uppercase tracking-widest text-muted">Materials list</div>
@@ -215,7 +242,7 @@ export default function BomAuditPage() {
         </div>
 
         {/* Results panel */}
-        <div className="lg:col-span-3 space-y-4">
+        <div className="lg:col-span-3 print:col-span-5 print:max-w-full space-y-4">
           {!report && !loading && (
             <div className="card py-28 flex flex-col items-center text-center">
               <div className="text-4xl mb-4">🔬</div>
@@ -235,6 +262,22 @@ export default function BomAuditPage() {
 
           {report && s && (
             <>
+              {/* Export actions */}
+              <div className="flex items-center justify-end gap-2 print:hidden">
+                <button onClick={downloadCSV} className="btn-accent text-[11px] py-1.5 px-3 inline-flex items-center gap-1.5">
+                  <Download size={12}/> Export CSV
+                </button>
+                <button onClick={() => window.print()} className="btn-accent text-[11px] py-1.5 px-3 inline-flex items-center gap-1.5">
+                  <Printer size={12}/> Print / PDF
+                </button>
+              </div>
+
+              {/* Print header */}
+              <div className="hidden print:block mb-2">
+                <div className="text-lg font-bold">OrbitChem — BOM Audit Report</div>
+                <div className="text-xs">{new Date().toLocaleString()} · {s.total} materials · {s.pass} pass / {s.fail} fail / {s.critical} critical</div>
+              </div>
+
               {/* Summary bar */}
               <div className={`flex items-center gap-3 p-4 rounded-lg border ${
                 s.fail === 0

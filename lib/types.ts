@@ -73,3 +73,26 @@ export interface SpaceMaterial {
   vp_kPa: number | null; cte_ppm_K: number | null
   modulus_GPa: number | null; uts_MPa: number | null; cost_usd_kg: number | null
 }
+
+export interface ContaminationResult {
+  material: string
+  matched_name: string | null
+  in_db: boolean
+  tml_pct: number
+  source_area_cm2: number
+  distance_cm: number
+  T_source_C: number
+  T_optic_C: number
+  mission_years: number
+  volatile_pool_ng_cm2: number
+  tau_days: number
+  sticking_coeff: number
+  total_deposited_ng_cm2: number
+  avg_rate_ng_cm2_yr: number
+  mil_std_level: string
+  transmission_loss_pct: number
+  risk: 'low' | 'medium' | 'high' | 'critical'
+  warnings: string[]
+  assumptions: string[]
+  yearly_cumulative: { year: number; deposited_ng_cm2: number }[]
+}

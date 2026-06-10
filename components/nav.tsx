@@ -7,6 +7,7 @@ import { Menu, X, Zap } from 'lucide-react'
 const LINKS = [
   { href: '/',                 label: 'Dashboard' },
   { href: '/bom-audit',        label: '🔬 BOM Audit' },
+  { href: '/contamination',    label: '☁️ Contamination' },
   { href: '/qualification',    label: 'Full Qual' },
   { href: '/type2',            label: '⚡ Type II' },
   { href: '/orbit-comparison', label: 'Orbit Cmp' },

@@ -1,4 +1,4 @@
-import type { BlendMap, OutgassingReport, RadiationReport, ThermalReport, FullQualReport, SpaceMaterial, OrbitEnv, Substrate, BomAuditReport } from './types'
+import type { BlendMap, OutgassingReport, RadiationReport, ThermalReport, FullQualReport, SpaceMaterial, OrbitEnv, Substrate, BomAuditReport, ContaminationResult } from './types'
 
 const BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8003'
 
@@ -45,4 +45,14 @@ export const api = {
 
   bomAudit: (materials: string[]) =>
     post<BomAuditReport>('/api/v1/bom-audit', { materials }),
+
+  contaminationProximity: (params: {
+    material: string
+    source_area_cm2: number
+    distance_cm: number
+    T_source_C: number
+    T_optic_C: number
+    mission_years: number
+  }) =>
+    post<ContaminationResult>('/api/v1/contamination-proximity', params),
 }

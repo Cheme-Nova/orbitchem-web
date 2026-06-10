@@ -124,3 +124,14 @@
     color: #F0F2F5;
   }
 }
+
+@media print {
+  nav, .print\:hidden { display: none !important; }
+  body, .card { background: #fff !important; color: #111 !important; }
+  .card { border: 1px solid #ccc !important; box-shadow: none !important; }
+  * { color: #111 !important; }
+  .text-success, .text-danger, .text-warn, .text-orange-400, .text-teal {
+    color: #000 !important; font-weight: 700 !important;
+  }
+  a[href]:after { content: none !important; }
+}
