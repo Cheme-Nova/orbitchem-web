@@ -74,6 +74,21 @@ export interface SpaceMaterial {
   modulus_GPa: number | null; uts_MPa: number | null; cost_usd_kg: number | null
 }
 
+export interface SpaceSolarPrediction {
+  smiles: string
+  name: string
+  bandgap_eV: number
+  space_efficiency: number
+  planarity_score: number
+  pi_extent: number
+  fp_density: number
+  fluoro_sub: number
+  mw: number
+  is_space_optimal: boolean
+  space_score: number
+  outgassing_risk: 'low' | 'moderate' | 'high'
+}
+
 export interface ContaminationResult {
   material: string
   matched_name: string | null

@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { api } from '@/lib/api'
-import type { OrbitEnv, Substrate, FullQualReport } from '@/lib/types'
+import type { OrbitEnv, Substrate, FullQualReport, SpaceSolarPrediction } from '@/lib/types'
 import { QualCard, Spinner } from '@/components/qual-card'
 import { CheckCircle, AlertTriangle } from 'lucide-react'
 
@@ -22,20 +22,23 @@ export default function Type2Page() {
   const [loading, setLoading] = useState(false)
   const [qual, setQual]       = useState<FullQualReport|null>(null)
   const [score, setScore]     = useState<number|null>(null)
+  const [solar, setSolar]     = useState<SpaceSolarPrediction|null>(null)
   const [error, setError]     = useState<string|null>(null)
 
   async function run() {
-    setLoading(true); setError(null); setQual(null); setScore(null)
+    setLoading(true); setError(null); setQual(null); setScore(null); setSolar(null)
     try {
-      const r = await api.fullQual({ [name]: 100 }, orbit, years, sub)
+      const [r, sp] = await Promise.all([
+        api.fullQual({ [name]: 100 }, orbit, years, sub),
+        api.spacechemPredict(smiles, name),
+      ])
       setQual(r)
+      setSolar(sp)
       // Type II Score: 35% Eg proximity + 30% efficiency + 20% rad + 15% outgassing
-      const eg = 2.0 + Math.random() * 1.0
-      const eta = 0.7 + Math.random() * 0.2
-      const fEg = 100 * Math.exp(-((eg - 1.8) ** 2) / (2 * 0.6 ** 2))
+      const fEg = 100 * Math.exp(-((sp.bandgap_eV - 1.8) ** 2) / (2 * 0.6 ** 2))
       const radScore = ['excellent','good'].includes(r.qualification_summary.radiation_rating) ? 80 : 30
       const ogScore  = r.qualification_summary.nasa_outgas_pass ? 85 : 20
-      setScore(+(0.35*fEg + 0.30*eta*100 + 0.20*radScore + 0.15*ogScore).toFixed(1))
+      setScore(+(0.35*fEg + 0.30*sp.space_efficiency*100 + 0.20*radScore + 0.15*ogScore).toFixed(1))
     } catch(e) { setError(String(e)) }
     finally { setLoading(false) }
   }
@@ -139,6 +142,14 @@ export default function Type2Page() {
                 <div className="text-[10px] font-mono text-muted mt-2">
                   Weights: 35% bandgap (AM0 optimum 1.8 eV) · 30% efficiency · 20% radiation hardness · 15% outgassing risk
                 </div>
+                {solar && (
+                  <div className="flex flex-wrap gap-4 mt-3 pt-3 border-t border-white/6 text-[11px] font-mono">
+                    <span className="text-muted">Eg <span className="text-light">{solar.bandgap_eV.toFixed(2)} eV</span></span>
+                    <span className="text-muted">η <span className="text-light">{(solar.space_efficiency*100).toFixed(1)}%</span></span>
+                    <span className="text-muted">Planarity <span className="text-light">{solar.planarity_score.toFixed(2)}</span></span>
+                    <span className="text-muted">MW <span className="text-light">{solar.mw.toFixed(1)}</span></span>
+                  </div>
+                )}
               </div>
 
               {/* Qual cards */}
